@@ -78,7 +78,7 @@ proc extract_coefficients(poly polynomial)
         // For example, if you want to substitute all variables b(0), b(1), b(2), and b(3) to 1:
         for (int j = 0; j < num_variables; j++)
         {
-            f = subst(f, b(j), 1);
+            f = subst(f, x(j), 1);
         }
 
         // Get the coefficient of the polynomial
@@ -98,4 +98,56 @@ proc ideal_from_list(list polynomials)
     I = std(I);
 
     return (I);
+}
+
+// brief: Compute the Weddle surface
+proc compute_weddle_surface(list points)
+{
+    poly weddle;
+
+    if (6 != size(points))
+    {
+        // Check if the number of points is 6
+        return (weddle); // Return a zero poly
+    }
+
+    // List of coefficients of monomials of degree 2 in P^3
+    list coefficients =
+        list(x(0) ^ 2,
+             x(1) ^ 2,
+             x(2) ^ 2,
+             x(3) ^ 2,
+             x(0) * x(1),
+             x(0) * x(2),
+             x(0) * x(3),
+             x(1) * x(2),
+             x(1) * x(3),
+             x(2) * x(3));
+
+    // Lists of derivatives of monomials of degree 2 in P^3
+    list derivatives_x0 = compute_derivative(coefficients, 0);
+    list derivatives_x1 = compute_derivative(coefficients, 1);
+    list derivatives_x2 = compute_derivative(coefficients, 2);
+    list derivatives_x3 = compute_derivative(coefficients, 3);
+
+    // List of elements of the matrix
+    list matrixList =
+        substitute_point(coefficients, points[1]) +
+        substitute_point(coefficients, points[2]) +
+        substitute_point(coefficients, points[3]) +
+        substitute_point(coefficients, points[4]) +
+        substitute_point(coefficients, points[5]) +
+        substitute_point(coefficients, points[6]) +
+        derivatives_x0 +
+        derivatives_x1 +
+        derivatives_x2 +
+        derivatives_x3;
+
+    // Create a matrix from the list of elements
+    matrix M = create_matrix(matrixList, 10, 10);
+
+    // Compute the determinant of the matrix
+    poly weddle = det(M);
+
+    return (weddle);
 }
