@@ -29,7 +29,7 @@ if (deg(weddle) != 4)
 
 // Extract the coefficients of Weddle surface
 list coeffList = extract_coefficients(weddle);
-// (-2*a(1)*a(3)+2*a(2)*a(3)), (2*a(0)*a(3)-2*a(2)*a(3)), (-2*a(0)*a(3)+2*a(1)*a(3)) ...
+// (2*a(0)(1)^2*a(1)(1)*a(1)(2)*a(2)(1)*a(2)(3)*a(3)(2)^2*a(4)(2)*a(4)(3)*a(5)(3)^2 + ...
 
 // Compute the ideal of coefficients of Weddle surface
 ideal coeffIdeal = ideal_from_list(coeffList);
